@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="/library/jquery-3.6.0.min.js"></script>
+  <script src="/library/bootstrap_js/bootstrap.min.js"></script>
+  <script src="/library/bootstrap_js/jquery.validate.min.js"></script>
+  <script src="/library/fontawesome/js/all.min.js"></script>
+  <link rel="stylesheet" href="/library/bootstrap_css/bootstrap.min.css" />
+</head>
+<body>
+  <div>
+    <div>
+        <div>
+          <div>  
+          <p>Chọn Năm</p>
+          <select>
+            <option selected>Chọn Năm</option>
+            <option th:each="year_s,iterStat : ${years}" th:value="${iterStat.count}" th:text="${year_s.year}"></option>
+          </select>
+          </div>
+          <div>  
+            <p>Chọn Khối</p>
+            <select>
+              <option selected>Chọn Khối</option>
+              <option th:each="grade,iterStat : ${grades}" th:value="${iterStat.count}" th:text="${grade.gradeID}"></option>
+            </select>
+            </div>
+            <div>  
+              <p>Chọn lớp</p>
+              <select>
+                <option selected>Chọn lớp</option>
+                <option value="1">6A1</option>
+                <option value="2">7A1</option>
+                <option value="3">8A1</option>
+                <option value="4">9A1</option>
+              </select>
+              </div>
+              <button type="submit">Chọn</button>
+        </div>
+        <div>
+          <div>
+          <h1>Lớp 5A (2011-2016)</h1>
+          </div>
+          <div>
+          <h3>Giáo viên chủ nhiệm:</h3>
+          <h3> Nguyễn Thị Thảo</h3>
+          <input type="button" value="Edit">
+          </div>
+          <div>
+            <table border="1">
+              <tr>
+                  <th>StudentID</th>
+                  <th>Name</th>
+                  <th>Birthday</th>
+                  <th>Gender</th>
+                  <th>Address</th>
+                  <th>Phone</th>
+                  <th>ClassInID</th>
+                  <th>Photo</th>
+                  <th>Chức năng</th>
+              </tr>
+              <tr th:each="student,iterStat : ${students}">
+                  <td th:text="${student.studentID}"></td>
+                  <td th:text="${student.name}"></td>
+                  <td th:text="${student.birthday}"></td>
+                  <td th:text="${student.gender}"></td>
+                  <td th:text="${student.address}"></td>
+                  <td th:text="${student.phone}"></td>
+                  <td th:text="${student.classStudying}"></td>
+                  <td>
+                  <img style="width:120px; height: 150px;" th:attr="src=@{${student.photo}}">
+                  </td>
+                  <td>
+                    <a role="button" th:href="'/studentls/'+${student.studentID}+'/edit'">Sửa</a>
+                  </td>
+              </tr>
+          </table>
+          </div>
+        </div>
+    </div>
+  </div>
+</body>
+</html>

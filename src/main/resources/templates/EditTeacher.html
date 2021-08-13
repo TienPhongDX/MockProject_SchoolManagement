@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!-- Basic -->
+
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+<!-- Mobile Metas -->
+<meta name="viewport"
+	content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+<!-- Site Metas -->
+<title>Cap nhat</title>
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+
+
+<!-- Font awesome 5 -->
+<script src="/fontawesome/js/all.js"></script>
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="../../css/bootstrap.min.css" />
+<!-- Pogo Slider CSS -->
+<link rel="stylesheet" href="../../css/pogo-slider.min.css" />
+<!-- Site CSS -->
+<link rel="stylesheet" href="../../css/style.css" />
+<!-- Responsive CSS -->
+<link rel="stylesheet" href="../../css/responsive.css" />
+<!-- Custom CSS -->
+<link rel="stylesheet" href="../../css/custom.css" />
+
+<link rel="stylesheet" href="/css/styles.css" />
+<!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body id="inner_page" data-spy="scroll" data-target="#navbar-wd"
+	data-offset="98">
+	<!-- LOADER -->
+	<!-- end loader -->
+	<!-- END LOADER -->
+
+	<!-- Start header -->
+	<header class="top-header" th:fragment="header">
+		<nav class="navbar header-nav navbar-expand-lg">
+			<div class="container-fluid">
+				<a class="navbar-brand" href="/"><img
+					src="/images/logo.png" alt="image" /></a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse"
+					data-target="#navbar-wd" aria-controls="navbar-wd"
+					aria-expanded="false" aria-label="Toggle navigation">
+					<span></span> <span></span> <span></span>
+				</button>
+				<div class="collapse navbar-collapse justify-content-end"
+					id="navbar-wd">
+					<ul class="navbar-nav" style="background-color: #f8f9fa;">
+						<li><a class="nav-link btn btn-light" href="/">Trang chủ</a></li>
+						<li class="dropdown ">
+							<button class="btn btn-light " type="button"
+								id="dropdownMenuButton" data-toggle="dropdown"
+								aria-haspopup="true" aria-expanded="false">Giáo viên</button>
+							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+								<a class="dropdown-item" href="/findteacher">Tìm kiếm giáo viên</a> 
+								<div sec:authorize="hasRole('TEACHER')">
+								<a class="dropdown-item" href="doimatkhau.html">Lớp chủ nhiệm</a> 
+								<a class="dropdown-item" href="/managemarks">Nhập điểm</a> 
+								<a class="dropdown-item" href="/viewschedule">Xem lịch dạy</a> 
+								</div>
+								<div sec:authorize="hasRole('ADMIN')">
+								<a class="dropdown-item" href="/teacher/register">Thêm giáo viên</a>
+								<a class="dropdown-item" href="/teacherls">Danh sách giáo viên</a>
+								</div>
+							</div>
+						</li>
+						<li class="dropdown ">
+							<button class="btn btn-light " type="button"
+								id="dropdownMenuButton" data-toggle="dropdown"
+								aria-haspopup="true" aria-expanded="false">Học sinh</button>
+							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+								<a class="dropdown-item" href="/findstudent">Tìm kiếm học sinh</a> 
+								<div sec:authorize="hasRole('ADMIN')">
+								<a class="dropdown-item" href="/addstudent">Thêm học sinh</a>
+								</div> 
+								<div sec:authorize="hasRole('STUDENT')">
+								<a class="dropdown-item" href="/viewmark">Xem điểm cá nhân</a>
+								</div>
+							</div>
+						</li>
+							<div sec:authorize="hasRole('ADMIN')">
+						<li class="dropdown ">
+							<button class="btn btn-light " type="button"
+								id="dropdownMenuButton" data-toggle="dropdown"
+								aria-haspopup="true" aria-expanded="false">Lớp</button>
+							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">		
+								<a class="dropdown-item" href="/addclass">Tạo mới lớp</a> 
+								<a class="dropdown-item" href="/viewstudent">Quản lý lớp học</a>		
+							</div>
+						</li>
+						</div>
+						<li class="dropdown ">
+							<button class="btn btn-light " type="button"
+								id="dropdownMenuButton" data-toggle="dropdown"
+								aria-haspopup="true" aria-expanded="false">Thời khóa biểu</button>
+							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+								<div sec:authorize="hasRole('ADMIN')">
+								<a class="dropdown-item" href="/addtimetable">Tạo thời khóa biểu</a>
+								</div> 
+								<a class="dropdown-item" href="/viewtimetable">Xem thời khóa biểu</a>
+							</div>
+						</li>
+						<li class="dropdown ">
+			                <button class="btn btn-light " type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			                  Ứng dụng trợ giảng
+			                </button>
+			                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+			                  <a class="dropdown-item" href="/chem">Mô phỏng phân tử hóa</a>
+			                </div>
+			            </li>
+						<div sec:authorize="hasAnyRole('ADMIN','TEACHER','STUDENT')">
+						<li class="dropdown ">
+							<button class="btn btn-light dropdown-toggle thirdBorderColor"
+								type="button" id="dropdownMenuButton" data-toggle="dropdown"
+								aria-haspopup="true" aria-expanded="false">
+								<span sec:authentication="name"></span>
+							</button>
+							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+								<div sec:authorize="hasRole('TEACHER')">
+								<a class="dropdown-item" href="/teacher/editpersonal">Thông tin cá nhân</a> 
+								</div>
+								<div sec:authorize="hasRole('STUDENT')">
+								<a class="dropdown-item" href="/student/editpersonal">Thông tin cá nhân</a> 
+								</div>
+								<a class="dropdown-item" href="/change">Đổi mật khẩu</a>
+								<form action="#" th:action="@{/logout}" method="POST">
+									<button type="submit" class="dropdown-item">Đăng xuất</button>
+								</form>
+							</div>
+						</li>
+						</div>
+						<div sec:authorize="isAnonymous()">
+						<li>
+                		<a class="btn btn-primary thirdBgColor login-hover" href="/login" >Đăng nhập</a>
+            			 </li>
+            			 </div>
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</header>
+	<!-- End header -->
+
+	<!-- section -->
+
+	<section class="inner_banner">
+		<div class="container">
+			<div class="row">
+				<div class="col-12">
+					<div class="full">
+						<h1>Chỉnh sửa thông tin giáo viên</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- end section -->
+
+	<!-- section -->
+	<div class="section margin-top_50">
+		<div class="container">
+			<div class="d-flex justify-content-center">
+				<form action="#" th:action="@{/teacher/save}" th:object="${teacher}"
+					method="POST" class="border p-5 row mb-5">
+					<input type="hidden" id="id" name="id" th:value="*{teacherID}">
+					<div class="col-6">
+						<div>
+							<div class="displayDiv">
+								<img id="myImg" onclick="selectImg(event)" th:src="*{photo}" />
+								<label for="" id="upProgress"></label> <input name="photo"
+									type="hidden" id="url" value=" " />
+							</div>
+
+							<div class="btnDiv">
+								<button type="button" id="upload" class="btn btn-primary">Đăng
+									ảnh</button>
+							</div>
+						</div>
+						<div>
+							<label for="name">Nhập Họ tên</label> <input type="text"
+								id="name" placeholder=" " th:field="*{name}">
+						</div>
+						<div>
+							<label for="birthday">Nhập ngày sinh</label> <input type="date"
+								placeholder=" " id="birthday" name="birthday"
+								th:value="*{birthday}">
+						</div>
+					</div>
+					<div class="col-6">
+						<div>
+							<label>Nhập giới tính</label> <input type="radio" name="gender"
+								id="nam" value="Nam"> <label
+								class="" for="nam">Nam </label> <input class="" type="radio"
+								name="gender" id="nu" value="Nữ" >
+							<label class="" for="nu"> Nữ </label>
+						</div>
+						<div>
+							<label for="address">Nhập địa chỉ</label> <input type="text"
+								placeholder=" " id="address" th:field="*{address}"
+								>
+						</div>
+						<div>
+							<label for="phone">Nhập số điện thoại</label> <input type="text"
+								placeholder=" " id="phone" th:field="*{phone}"
+								>
+						</div>
+						<div>
+							<label>Nhập môn học</label> <select name="subjectID"
+								>
+								<option value="" selected>-Chọn môn học-</option>
+								<option th:each="subject : ${subjects}"
+									th:value="${subject.subjectID}"
+									th:text="${subject.subjectName}"></option>
+							</select>
+						</div>
+						<div>
+							<label for="salary">Nhập lương</label> <input type="text"
+								placeholder=" " id="salary" th:field="*{salary}"
+								>
+						</div>
+					</div>
+
+					<div>
+						<button type="submit" class="btn btn-success">Cập nhật</button>
+						<button type="button" class="btn btn-light">
+							<a href="/teacherls">Quay Lại</a>
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<!-- end section -->
+
+	<!-- Start Footer -->
+	<footer class="footer-box" th:fragment="footer">
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
+					<div class="footer_blog">
+						<div class="full margin-bottom_30">
+							<img src="/images/footer_logo.png" alt="#" />
+						</div>
+						<div class="full white_fonts">
+							<p>
+							The mission of PerfectLearn is to nurture students to develop their talents and skills to be responsible, 
+							success-oriented citizens who contribute to the ongoing improvement of their local, national and international communities. 
+							</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
+					<div class="footer_blog footer_menu white_fonts">
+						<h3>Quick links</h3>
+						<ul>
+							<li><a href="#">> Join Us</a></li>
+							<li><a href="#">> Maintenance</a></li>
+							<li><a href="#">> Language Packs</a></li>
+							<li><a href="#">> LearnPress</a></li>
+							<li><a href="#">> Release Status</a></li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
+					<div class="footer_blog full white_fonts">
+						<h3>Newsletter</h3>
+						<p>Hãy đăng kí để có thể nhận được những tin tức, ưu đãi và thông báo mới nhất từ chúng tôi</p>
+						<div class="newsletter_form">
+							<form action="index.html">
+								<input type="email" placeholder="Your Email" name="#" required />
+								<button>Gửi</button>
+							</form>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
+					<div class="footer_blog full white_fonts">
+						<h3>Contact us</h3>
+						<ul class="full">
+							<li><i
+								class="fas fa-map-marker-alt mr-3 d-flex align-items-center mt-1"></i>
+								<span>69 Le Duan, Da Nang<br/>Viet Nam</span></li>
+							<li><i
+								class="fas fa-envelope mr-3 d-flex align-items-center mt-1"></i><span>perfectlearn@edu.com.vn</span>
+							</li>
+							<li><i
+								class="fas fa-phone mr-3 d-flex align-items-center mt-1"></i><span>+84586954775</span>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</footer>
+	<!-- End Footer -->
+
+	<a href="#" id="scroll-to-top" class="hvr-radial-out"><i
+		class="fa fa-angle-up"></i></a>
+	<!-- Upload Img -->
+	<script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.3.2/firebase-auth.js"></script>
+	<script
+		src="https://www.gstatic.com/firebasejs/8.3.2/firebase-database.js"></script>
+	<script
+		src="https://www.gstatic.com/firebasejs/8.3.2/firebase-storage.js"></script>
+	<script type="text/javascript" th:src="@{/js/uploadImg.js}"></script>
+	<!-- ALL JS FILES -->
+	<script src="/js/jquery.min.js"></script>
+	<script src="/js/popper.min.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+	<!-- ALL PLUGINS -->
+	<script src="/js/jquery.magnific-popup.min.js"></script>
+	<script src="/js/jquery.pogo-slider.min.js"></script>
+	<script src="/js/slider-index.js"></script>
+	<script src="/js/smoothscroll.js"></script>
+	<script src="/js/form-validator.min.js"></script>
+	<script src="/js/contact-form-script.js"></script>
+	<script src="/js/isotope.min.js"></script>
+	<script src="/js/images-loded.min.js"></script>
+	<script src="/js/custom.js"></script>
+	<script>
+		/* counter js */
+
+		(function($) {
+			$.fn.countTo = function(options) {
+				options = options || {};
+
+				return $(this)
+						.each(
+								function() {
+									// set options for current element
+									var settings = $.extend({},
+											$.fn.countTo.defaults, {
+												from : $(this).data("from"),
+												to : $(this).data("to"),
+												speed : $(this).data("speed"),
+												refreshInterval : $(this).data(
+														"refresh-interval"),
+												decimals : $(this).data(
+														"decimals"),
+											}, options);
+
+									// how many times to update the value, and how much to increment the value on each update
+									var loops = Math.ceil(settings.speed
+											/ settings.refreshInterval), increment = (settings.to - settings.from)
+											/ loops;
+
+									// references & variables that will change with each update
+									var self = this, $self = $(this), loopCount = 0, value = settings.from, data = $self
+											.data("countTo")
+											|| {};
+
+									$self.data("countTo", data);
+
+									// if an existing interval can be found, clear it first
+									if (data.interval) {
+										clearInterval(data.interval);
+									}
+									data.interval = setInterval(updateTimer,
+											settings.refreshInterval);
+
+									// initialize the element with the starting value
+									render(value);
+
+									function updateTimer() {
+										value += increment;
+										loopCount++;
+
+										render(value);
+
+										if (typeof settings.onUpdate == "function") {
+											settings.onUpdate.call(self, value);
+										}
+
+										if (loopCount >= loops) {
+											// remove the interval
+											$self.removeData("countTo");
+											clearInterval(data.interval);
+											value = settings.to;
+
+											if (typeof settings.onComplete == "function") {
+												settings.onComplete.call(self,
+														value);
+											}
+										}
+									}
+
+									function render(value) {
+										var formattedValue = settings.formatter
+												.call(self, value, settings);
+										$self.html(formattedValue);
+									}
+								});
+			};
+
+			$.fn.countTo.defaults = {
+				from : 0, // the number the element should start at
+				to : 0, // the number the element should end at
+				speed : 1000, // how long it should take to count between the target numbers
+				refreshInterval : 100, // how often the element should be updated
+				decimals : 0, // the number of decimal places to show
+				formatter : formatter, // handler for formatting the value before rendering
+				onUpdate : null, // callback method for every time the element is updated
+				onComplete : null, // callback method for when the element finishes updating
+			};
+
+			function formatter(value, settings) {
+				return value.toFixed(settings.decimals);
+			}
+		})(jQuery);
+
+		jQuery(function($) {
+			// custom formatting example
+			$(".count-number").data(
+					"countToOptions",
+					{
+						formatter : function(value, options) {
+							return value.toFixed(options.decimals).replace(
+									/\B(?=(?:\d{3})+(?!\d))/g, ",");
+						},
+					});
+
+			// start all the timers
+			$(".timer").each(count);
+
+			function count(options) {
+				var $this = $(this);
+				options = $.extend({}, options || {}, $this
+						.data("countToOptions")
+						|| {});
+				$this.countTo(options);
+			}
+		});
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,106 @@
+<header class="top-header" th:fragment="header">
+	<nav class="navbar header-nav navbar-expand-lg">
+			<div class="container-fluid">
+				<a class="navbar-brand" href="/"><img
+					src="images/logo.png" alt="image" /></a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse"
+					data-target="#navbar-wd" aria-controls="navbar-wd"
+					aria-expanded="false" aria-label="Toggle navigation">
+					<span></span> <span></span> <span></span>
+				</button>
+				<div class="collapse navbar-collapse justify-content-end"
+					id="navbar-wd">
+					<ul class="navbar-nav" style="background-color: #f8f9fa;">
+						<li><a class="nav-link btn btn-light" href="/">Trang chủ</a></li>
+						<li class="dropdown ">
+							<button class="btn btn-light " type="button"
+								id="dropdownMenuButton" data-toggle="dropdown"
+								aria-haspopup="true" aria-expanded="false">Giáo viên</button>
+							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+								<a class="dropdown-item" href="/findteacher">Tìm kiếm giáo viên</a> 
+								<div sec:authorize="hasRole('TEACHER')">
+								<a class="dropdown-item" href="doimatkhau.html">Lớp chủ nhiệm</a> 
+								<a class="dropdown-item" href="/managemarks">Nhập điểm</a> 
+								<a class="dropdown-item" href="/viewschedule">Xem lịch dạy</a> 
+								</div>
+								<div sec:authorize="hasRole('ADMIN')">
+								<a class="dropdown-item" href="/teacher/register">Thêm giáo viên</a>
+								<a class="dropdown-item" href="/teacherls">Danh sách giáo viên</a>
+								</div>
+							</div>
+						</li>
+						<li class="dropdown ">
+							<button class="btn btn-light " type="button"
+								id="dropdownMenuButton" data-toggle="dropdown"
+								aria-haspopup="true" aria-expanded="false">Học sinh</button>
+							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+								<a class="dropdown-item" href="/findstudent">Tìm kiếm học sinh</a> 
+								<div sec:authorize="hasRole('ADMIN')">
+								<a class="dropdown-item" href="/addstudent">Thêm học sinh</a>
+								</div> 
+								<div sec:authorize="hasRole('STUDENT')">
+								<a class="dropdown-item" href="/viewmark">Xem điểm cá nhân</a>
+								</div>
+							</div>
+						</li>
+							<div sec:authorize="hasRole('ADMIN')">
+						<li class="dropdown ">
+							<button class="btn btn-light " type="button"
+								id="dropdownMenuButton" data-toggle="dropdown"
+								aria-haspopup="true" aria-expanded="false">Lớp</button>
+							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">		
+								<a class="dropdown-item" href="/addclass">Tạo mới lớp</a> 
+								<a class="dropdown-item" href="/viewstudent">Quản lý lớp học</a>		
+							</div>
+						</li>
+						</div>
+						<li class="dropdown ">
+							<button class="btn btn-light " type="button"
+								id="dropdownMenuButton" data-toggle="dropdown"
+								aria-haspopup="true" aria-expanded="false">Thời khóa biểu</button>
+							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+								<div sec:authorize="hasRole('ADMIN')">
+								<a class="dropdown-item" href="/addtimetable">Tạo thời khóa biểu</a>
+								</div> 
+								<a class="dropdown-item" href="/viewtimetable">Xem thời khóa biểu</a>
+							</div>
+						</li>
+						<li class="dropdown ">
+			                <button class="btn btn-light " type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			                  Ứng dụng trợ giảng
+			                </button>
+			                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+			                  <a class="dropdown-item" href="/chem">Mô phỏng phân tử hóa</a>
+			                </div>
+			            </li>
+						<div sec:authorize="hasAnyRole('ADMIN','TEACHER','STUDENT')">
+						<li class="dropdown ">
+							<button class="btn btn-light dropdown-toggle thirdBorderColor"
+								type="button" id="dropdownMenuButton" data-toggle="dropdown"
+								aria-haspopup="true" aria-expanded="false">
+								<span sec:authentication="name"></span>
+							</button>
+							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+								<div sec:authorize="hasRole('TEACHER')">
+								<a class="dropdown-item" href="/teacher/editpersonal">Thông tin cá nhân</a> 
+								</div>
+								<div sec:authorize="hasRole('STUDENT')">
+								<a class="dropdown-item" href="/student/editpersonal">Thông tin cá nhân</a> 
+								</div>
+								<a class="dropdown-item" href="/change">Đổi mật khẩu</a>
+								<form action="#" th:action="@{/logout}" method="POST">
+									<button type="submit" class="dropdown-item">Đăng xuất</button>
+								</form>
+							</div>
+						</li>
+						</div>
+						<div sec:authorize="isAnonymous()">
+						<li>
+                		<a class="btn btn-primary thirdBgColor login-hover" href="/login" >Đăng nhập</a>
+            			 </li>
+            			 </div>
+					</ul>
+				</div>
+			</div>
+		</nav>
+	</header>

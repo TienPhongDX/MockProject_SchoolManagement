@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Basic -->
+
+<head>
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+<!-- Mobile Metas -->
+<meta name="viewport"
+	content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+<!-- Site Metas -->
+<title>Chemistry 3D</title>
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<meta name="author" content="" />
+
+
+<!-- Kekule js -->
+
+<script src="/Kekule.js-master/demos/libs/Three.js"></script>
+<script src="/Kekule.js-master/demos/libs/raphael-min.2.0.1.js"></script>
+<script
+	src="/Kekule.js-master/demos/libs/kekule/kekule.js?modules=calculation,chemWidget,openbabel"></script>
+<link rel="stylesheet"
+	href="/Kekule.js-master/demos/libs/kekule/themes/default/kekule.css">
+
+<!-- Font awesome 5 -->
+<script src="/fontawesome/js/all.js"></script>
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="/css/bootstrap.min.css" />
+<!-- Pogo Slider CSS -->
+<link rel="stylesheet" href="/css/pogo-slider.min.css" />
+<!-- Site CSS -->
+<link rel="stylesheet" href="/css/style.css" />
+<!-- Responsive CSS -->
+<link rel="stylesheet" href="/css/responsive.css" />
+<!-- Custom CSS -->
+<link rel="stylesheet" href="/css/custom.css" />
+
+<!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+<style>
+#state {
+	height: 2em;
+	line-height: 2;
+	font-weight: bold;
+}
+
+#description {
+	clear: both;
+	padding: 1em;
+}
+
+#composer, #chemViewer {
+	width: 800px;
+	height: 500px;
+	float: left;
+}
+</style>
+
+</head>
+
+<body id="inner_page" data-spy="scroll" data-target="#navbar-wd"
+	data-offset="98">
+	<!-- LOADER -->
+	<div id="preloader">
+		<div class="loader">
+			<img src="/images/loader.gif" alt="#" />
+		</div>
+	</div>
+	<!-- end loader -->
+	<!-- END LOADER -->
+
+	<!-- Start header -->
+	<header class="top-header" th:fragment="header">
+		<nav class="navbar header-nav navbar-expand-lg">
+			<div class="container-fluid">
+				<a class="navbar-brand" href="/"><img
+					src="/images/logo.png" alt="image" /></a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse"
+					data-target="#navbar-wd" aria-controls="navbar-wd"
+					aria-expanded="false" aria-label="Toggle navigation">
+					<span></span> <span></span> <span></span>
+				</button>
+				<div class="collapse navbar-collapse justify-content-end"
+					id="navbar-wd">
+					<ul class="navbar-nav" style="background-color: #f8f9fa;">
+						<li><a class="nav-link btn btn-light" href="/">Trang chủ</a></li>
+						<li class="dropdown ">
+							<button class="btn btn-light " type="button"
+								id="dropdownMenuButton" data-toggle="dropdown"
+								aria-haspopup="true" aria-expanded="false">Giáo viên</button>
+							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+								<a class="dropdown-item" href="/findteacher">Tìm kiếm giáo viên</a> 
+								<div sec:authorize="hasRole('TEACHER')">
+								<a class="dropdown-item" href="doimatkhau.html">Lớp chủ nhiệm</a> 
+								<a class="dropdown-item" href="/managemarks">Nhập điểm</a> 
+								<a class="dropdown-item" href="/viewschedule">Xem lịch dạy</a> 
+								</div>
+								<div sec:authorize="hasRole('ADMIN')">
+								<a class="dropdown-item" href="/teacher/register">Thêm giáo viên</a>
+								<a class="dropdown-item" href="/teacherls">Danh sách giáo viên</a>
+								</div>
+							</div>
+						</li>
+						<li class="dropdown ">
+							<button class="btn btn-light " type="button"
+								id="dropdownMenuButton" data-toggle="dropdown"
+								aria-haspopup="true" aria-expanded="false">Học sinh</button>
+							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+								<a class="dropdown-item" href="/findstudent">Tìm kiếm học sinh</a> 
+								<div sec:authorize="hasRole('ADMIN')">
+								<a class="dropdown-item" href="/addstudent">Thêm học sinh</a>
+								</div> 
+								<div sec:authorize="hasRole('STUDENT')">
+								<a class="dropdown-item" href="/viewmark">Xem điểm cá nhân</a>
+								</div>
+							</div>
+						</li>
+							<div sec:authorize="hasRole('ADMIN')">
+						<li class="dropdown ">
+							<button class="btn btn-light " type="button"
+								id="dropdownMenuButton" data-toggle="dropdown"
+								aria-haspopup="true" aria-expanded="false">Lớp</button>
+							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">		
+								<a class="dropdown-item" href="/addclass">Tạo mới lớp</a> 
+								<a class="dropdown-item" href="/viewstudent">Quản lý lớp học</a>		
+							</div>
+						</li>
+						</div>
+						<li class="dropdown ">
+							<button class="btn btn-light " type="button"
+								id="dropdownMenuButton" data-toggle="dropdown"
+								aria-haspopup="true" aria-expanded="false">Thời khóa biểu</button>
+							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+								<div sec:authorize="hasRole('ADMIN')">
+								<a class="dropdown-item" href="/addtimetable">Tạo thời khóa biểu</a>
+								</div> 
+								<a class="dropdown-item" href="/viewtimetable">Xem thời khóa biểu</a>
+							</div>
+						</li>
+						<li class="dropdown ">
+			                <button class="btn btn-light " type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+			                  Ứng dụng trợ giảng
+			                </button>
+			                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+			                  <a class="dropdown-item" href="/chem">Mô phỏng phân tử hóa</a>
+			                </div>
+			            </li>
+						<div sec:authorize="hasAnyRole('ADMIN','TEACHER','STUDENT')">
+						<li class="dropdown ">
+							<button class="btn btn-light dropdown-toggle thirdBorderColor"
+								type="button" id="dropdownMenuButton" data-toggle="dropdown"
+								aria-haspopup="true" aria-expanded="false">
+								<span sec:authentication="name"></span>
+							</button>
+							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+								<div sec:authorize="hasRole('TEACHER')">
+								<a class="dropdown-item" href="/teacher/editpersonal">Thông tin cá nhân</a> 
+								</div>
+								<div sec:authorize="hasRole('STUDENT')">
+								<a class="dropdown-item" href="/student/editpersonal">Thông tin cá nhân</a> 
+								</div>
+								<a class="dropdown-item" href="/change">Đổi mật khẩu</a>
+								<form action="#" th:action="@{/logout}" method="POST">
+									<button type="submit" class="dropdown-item">Đăng xuất</button>
+								</form>
+							</div>
+						</li>
+						</div>
+						<div sec:authorize="isAnonymous()">
+						<li>
+                		<a class="btn btn-primary thirdBgColor login-hover" href="/login" >Đăng nhập</a>
+            			 </li>
+            			 </div>
+					</ul>
+				</div>
+			</div>
+		</nav>	</header>
+	<!-- End header -->
+
+	<!-- section -->
+
+	<section class="inner_banner">
+		<div class="container">
+			<div class="row">
+				<div class="col-12">
+					<div class="full">
+						<h1>Tạo ảnh 3D phân tử hóa học</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- end section -->
+
+	<!-- section -->
+	<div class="section margin-top_50">
+		<div class="container-fluid">
+			<div class="row d-flex justify-content-center align-items-center">
+				<!-- Bỏ các file jsp vào đây -->
+
+				<div class="p-3" style="position: relative;">
+					<div id="state" style="position: absolute; top: -2rem;"></div>
+					<div id="composer" data-widget="Kekule.Editor.Composer"
+						data-chem-obj="url(#molSrc)" data-predefined-setting="molOnly"></div>
+				</div>
+				<div class="p-3">
+					<div id="chemViewer" data-widget="Kekule.ChemWidget.Viewer3D"
+						data-predefined-setting="fullFunc" data-toolbar-evoke-modes="[0]"
+						data-toolbar-pos="1" data-toolbar-margin-horizontal="0"
+						data-toolbar-margin-vertical="0"></div>
+				</div>
+
+
+				<!-- <div id="description">
+		<p>Draw or load molecules in editors and click on "Generate 3D" button perform calculation of getting 3D structure. Press "Terminate" button to stop the calculation.</p>
+		<p>The 3D generating process is performed totally on client and requires no server side calculation.</p>
+	</div> -->
+			</div>
+		</div>
+	</div>
+	<!-- end section -->
+
+	<!-- Start Footer -->
+	<footer class="footer-box" th:fragment="footer">
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
+					<div class="footer_blog">
+						<div class="full margin-bottom_30">
+							<img src="/images/footer_logo.png" alt="#" />
+						</div>
+						<div class="full white_fonts">
+							<p>
+							The mission of PerfectLearn is to nurture students to develop their talents and skills to be responsible, 
+							success-oriented citizens who contribute to the ongoing improvement of their local, national and international communities. 
+							</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
+					<div class="footer_blog footer_menu white_fonts">
+						<h3>Quick links</h3>
+						<ul>
+							<li><a href="#">> Join Us</a></li>
+							<li><a href="#">> Maintenance</a></li>
+							<li><a href="#">> Language Packs</a></li>
+							<li><a href="#">> LearnPress</a></li>
+							<li><a href="#">> Release Status</a></li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
+					<div class="footer_blog full white_fonts">
+						<h3>Newsletter</h3>
+						<p>Hãy đăng kí để có thể nhận được những tin tức, ưu đãi và thông báo mới nhất từ chúng tôi</p>
+						<div class="newsletter_form">
+							<form action="index.html">
+								<input type="email" placeholder="Your Email" name="#" required />
+								<button>Gửi</button>
+							</form>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
+					<div class="footer_blog full white_fonts">
+						<h3>Contact us</h3>
+						<ul class="full">
+							<li><i
+								class="fas fa-map-marker-alt mr-3 d-flex align-items-center mt-1"></i>
+								<span>69 Le Duan, Da Nang<br/>Viet Nam</span></li>
+							<li><i
+								class="fas fa-envelope mr-3 d-flex align-items-center mt-1"></i><span>perfectlearn@edu.com.vn</span>
+							</li>
+							<li><i
+								class="fas fa-phone mr-3 d-flex align-items-center mt-1"></i><span>+84586954775</span>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</footer>
+	<!-- End Footer -->
+
+	<a href="#" id="scroll-to-top" class="hvr-radial-out"><i
+		class="fa fa-angle-up"></i></a>
+
+	<!-- ALL JS FILES -->
+	<script src="js/jquery.min.js"></script>
+	<script src="js/popper.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<!-- ALL PLUGINS -->
+	<script src="js/jquery.magnific-popup.min.js"></script>
+	<script src="js/jquery.pogo-slider.min.js"></script>
+	<script src="js/slider-index.js"></script>
+	<script src="js/smoothscroll.js"></script>
+	<script src="js/form-validator.min.js"></script>
+	<script src="js/contact-form-script.js"></script>
+	<script src="js/isotope.min.js"></script>
+	<script src="js/images-loded.min.js"></script>
+	<script src="js/custom.js"></script>
+	<script>
+		/* counter js */
+
+		(function($) {
+			$.fn.countTo = function(options) {
+				options = options || {};
+
+				return $(this)
+						.each(
+								function() {
+									// set options for current element
+									var settings = $.extend({},
+											$.fn.countTo.defaults, {
+												from : $(this).data("from"),
+												to : $(this).data("to"),
+												speed : $(this).data("speed"),
+												refreshInterval : $(this).data(
+														"refresh-interval"),
+												decimals : $(this).data(
+														"decimals"),
+											}, options);
+
+									// how many times to update the value, and how much to increment the value on each update
+									var loops = Math.ceil(settings.speed
+											/ settings.refreshInterval), increment = (settings.to - settings.from)
+											/ loops;
+
+									// references & variables that will change with each update
+									var self = this, $self = $(this), loopCount = 0, value = settings.from, data = $self
+											.data("countTo")
+											|| {};
+
+									$self.data("countTo", data);
+
+									// if an existing interval can be found, clear it first
+									if (data.interval) {
+										clearInterval(data.interval);
+									}
+									data.interval = setInterval(updateTimer,
+											settings.refreshInterval);
+
+									// initialize the element with the starting value
+									render(value);
+
+									function updateTimer() {
+										value += increment;
+										loopCount++;
+
+										render(value);
+
+										if (typeof settings.onUpdate == "function") {
+											settings.onUpdate.call(self, value);
+										}
+
+										if (loopCount >= loops) {
+											// remove the interval
+											$self.removeData("countTo");
+											clearInterval(data.interval);
+											value = settings.to;
+
+											if (typeof settings.onComplete == "function") {
+												settings.onComplete.call(self,
+														value);
+											}
+										}
+									}
+
+									function render(value) {
+										var formattedValue = settings.formatter
+												.call(self, value, settings);
+										$self.html(formattedValue);
+									}
+								});
+			};
+
+			$.fn.countTo.defaults = {
+				from : 0, // the number the element should start at
+				to : 0, // the number the element should end at
+				speed : 1000, // how long it should take to count between the target numbers
+				refreshInterval : 100, // how often the element should be updated
+				decimals : 0, // the number of decimal places to show
+				formatter : formatter, // handler for formatting the value before rendering
+				onUpdate : null, // callback method for every time the element is updated
+				onComplete : null, // callback method for when the element finishes updating
+			};
+
+			function formatter(value, settings) {
+				return value.toFixed(settings.decimals);
+			}
+		})(jQuery);
+
+		jQuery(function($) {
+			// custom formatting example
+			$(".count-number").data(
+					"countToOptions",
+					{
+						formatter : function(value, options) {
+							return value.toFixed(options.decimals).replace(
+									/\B(?=(?:\d{3})+(?!\d))/g, ",");
+						},
+					});
+
+			// start all the timers
+			$(".timer").each(count);
+
+			function count(options) {
+				var $this = $(this);
+				options = $.extend({}, options || {}, $this
+						.data("countToOptions")
+						|| {});
+				$this.countTo(options);
+			}
+		});
+	</script>
+	<script id="molSrc" type="chemical/x-kekule-json">
+      {"id":"m1","info":{"generator":"ChemDraw","date":{"__type__":"date","date":"Sat, 05 Sep 2015 11:46:28 GMT"},"__type__":"object"},"renderOptions":{"expanded":true,"__type__":"object"},"coord2D":{"x":12.375,"y":37.3811,"__type__":"object"},"charge":0,"parity":null,"ctab":{"nodes":[{"__type__":"Kekule.Atom","id":"a4","coord2D":{"x":0.7958,"y":0.4315,"__type__":"object"},"charge":0,"parity":null,"isotopeId":"C"},{"__type__":"Kekule.Atom","id":"a11","coord2D":{"x":0.0117,"y":0.1764,"__type__":"object"},"charge":0,"parity":null,"isotopeId":"N"},{"__type__":"Kekule.Atom","id":"a5","coord2D":{"x":0.7958,"y":1.2565,"__type__":"object"},"charge":0,"parity":null,"isotopeId":"C"},{"__type__":"Kekule.Atom","id":"a3","coord2D":{"x":1.5115,"y":0.0175,"__type__":"object"},"charge":0,"parity":null,"isotopeId":"N"},{"__type__":"Kekule.Atom","id":"a14","coord2D":{"x":0.0117,"y":-1.4648,"__type__":"object"},"charge":0,"parity":0,"isotopeId":"C"},{"__type__":"Kekule.Atom","id":"a7","coord2D":{"x":-0.4738,"y":0.8439,"__type__":"object"},"charge":0,"parity":null,"isotopeId":"C"},{"__type__":"Kekule.Atom","id":"a6","coord2D":{"x":1.5115,"y":1.6689,"__type__":"object"},"charge":0,"parity":null,"isotopeId":"C"},{"__type__":"Kekule.Atom","id":"a8","coord2D":{"x":0.0117,"y":1.5115,"__type__":"object"},"charge":0,"parity":null,"isotopeId":"N"},{"__type__":"Kekule.Atom","id":"a2","coord2D":{"x":2.2257,"y":0.4315,"__type__":"object"},"charge":0,"parity":null,"isotopeId":"C"},{"__type__":"Kekule.Atom","id":"a15","coord2D":{"x":-1.1048,"y":-1.0509,"__type__":"object"},"charge":0,"parity":null,"isotopeId":"O"},{"__type__":"Kekule.Atom","id":"a13","coord2D":{"x":-0.4095,"y":-1.9488,"__type__":"object"},"charge":0,"parity":null,"isotopeId":"C"},{"__type__":"Kekule.Atom","id":"a21","coord2D":{"x":0.0117,"y":-2.1732,"__type__":"object"},"charge":0,"parity":null,"isotopeId":"H"},{"__type__":"Kekule.Atom","id":"a1","coord2D":{"x":2.2257,"y":1.2565,"__type__":"object"},"charge":0,"parity":null,"isotopeId":"N"},{"__type__":"Kekule.Atom","id":"a9","coord2D":{"x":1.5115,"y":2.4939,"__type__":"object"},"charge":0,"parity":null,"isotopeId":"O"},{"__type__":"Kekule.Atom","id":"a10","coord2D":{"x":2.9428,"y":0.0175,"__type__":"object"},"charge":0,"parity":null,"isotopeId":"N"},{"__type__":"Kekule.Atom","id":"a16","coord2D":{"x":-2.2272,"y":-1.4648,"__type__":"object"},"charge":0,"parity":0,"isotopeId":"C"},{"__type__":"Kekule.Atom","id":"a12","coord2D":{"x":-1.7972,"y":-1.9488,"__type__":"object"},"charge":0,"parity":0,"isotopeId":"C"},{"__type__":"Kekule.Atom","id":"a19","coord2D":{"x":-0.4095,"y":-1.5231,"__type__":"object"},"charge":0,"parity":null,"isotopeId":"H"},{"__type__":"Kekule.Atom","id":"a17","coord2D":{"x":-0.4095,"y":-2.4939,"__type__":"object"},"charge":0,"parity":null,"isotopeId":"H"},{"__type__":"Kekule.Atom","id":"a22","coord2D":{"x":-2.2272,"y":-0.8031,"__type__":"object"},"charge":0,"parity":null,"isotopeId":"C"},{"__type__":"Kekule.Atom","id":"a23","coord2D":{"x":-2.2272,"y":-2.1732,"__type__":"object"},"charge":0,"parity":null,"isotopeId":"H"},{"__type__":"Kekule.Atom","id":"a18","coord2D":{"x":-1.7972,"y":-2.4939,"__type__":"object"},"charge":0,"parity":null,"isotopeId":"O"},{"__type__":"Kekule.Atom","id":"a20","coord2D":{"x":-1.7972,"y":-1.5231,"__type__":"object"},"charge":0,"parity":null,"isotopeId":"H"},{"__type__":"Kekule.Atom","id":"a24","coord2D":{"x":-2.9428,"y":-0.3892,"__type__":"object"},"charge":0,"parity":null,"isotopeId":"O"}],"anchorNodes":[],"connectors":[{"__type__":"Kekule.Bond","id":"b25","parity":null,"bondType":"covalent","bondOrder":1,"electronCount":3,"isInAromaticRing":true,"connectedNodes":[0,1]},{"__type__":"Kekule.Bond","id":"b4","parity":null,"bondType":"covalent","bondOrder":2,"electronCount":3,"isInAromaticRing":true,"connectedNodes":[0,2]},{"__type__":"Kekule.Bond","id":"b3","parity":null,"bondType":"covalent","bondOrder":1,"electronCount":3,"isInAromaticRing":true,"connectedNodes":[0,3]},{"__type__":"Kekule.Bond","id":"b23","parity":null,"bondType":"covalent","bondOrder":1,"electronCount":2,"isInAromaticRing":false,"connectedNodes":[1,4]},{"__type__":"Kekule.Bond","id":"b26","parity":null,"bondType":"covalent","bondOrder":1,"electronCount":3,"isInAromaticRing":true,"connectedNodes":[1,5]},{"__type__":"Kekule.Bond","id":"b5","parity":null,"bondType":"covalent","bondOrder":1,"electronCount":3,"isInAromaticRing":true,"connectedNodes":[2,6]},{"__type__":"Kekule.Bond","id":"b8","parity":null,"bondType":"covalent","bondOrder":1,"electronCount":3,"isInAromaticRing":true,"connectedNodes":[2,7]},{"__type__":"Kekule.Bond","id":"b2","parity":null,"bondType":"covalent","bondOrder":2,"electronCount":3,"isInAromaticRing":true,"connectedNodes":[3,8]},{"__type__":"Kekule.Bond","id":"b13","parity":null,"bondType":"covalent","bondOrder":1,"electronCount":2,"isInAromaticRing":false,"connectedNodes":[4,9]},{"__type__":"Kekule.Bond","id":"b12","parity":null,"bondType":"covalent","bondOrder":1,"electronCount":2,"isInAromaticRing":false,"connectedNodes":[4,10]},{"__type__":"Kekule.Bond","id":"b20","parity":null,"bondType":"covalent","bondOrder":1,"electronCount":2,"isInAromaticRing":false,"connectedNodes":[4,11]},{"__type__":"Kekule.Bond","id":"b7","parity":null,"bondType":"covalent","bondOrder":2,"electronCount":3,"isInAromaticRing":true,"connectedNodes":[5,7]},{"__type__":"Kekule.Bond","id":"b6","parity":null,"bondType":"covalent","bondOrder":1,"electronCount":3,"isInAromaticRing":true,"connectedNodes":[6,12]},{"__type__":"Kekule.Bond","id":"b9","bondType":"covalent","bondOrder":2,"electronCount":4,"isInAromaticRing":false,"connectedNodes":[6,13]},{"__type__":"Kekule.Bond","id":"b1","parity":null,"bondType":"covalent","bondOrder":1,"electronCount":3,"isInAromaticRing":true,"connectedNodes":[8,12]},{"__type__":"Kekule.Bond","id":"b10","parity":null,"bondType":"covalent","bondOrder":1,"electronCount":2,"isInAromaticRing":false,"connectedNodes":[8,14]},{"__type__":"Kekule.Bond","id":"b14","parity":null,"bondType":"covalent","bondOrder":1,"electronCount":2,"isInAromaticRing":false,"connectedNodes":[9,15]},{"__type__":"Kekule.Bond","id":"b11","parity":null,"bondType":"covalent","bondOrder":1,"electronCount":2,"isInAromaticRing":false,"connectedNodes":[10,16]},{"__type__":"Kekule.Bond","id":"b18","parity":null,"bondType":"covalent","bondOrder":1,"electronCount":2,"isInAromaticRing":false,"connectedNodes":[10,17]},{"__type__":"Kekule.Bond","id":"b16","parity":null,"bondType":"covalent","bondOrder":1,"electronCount":2,"isInAromaticRing":false,"connectedNodes":[10,18]},{"__type__":"Kekule.Bond","id":"b15","parity":null,"bondType":"covalent","bondOrder":1,"electronCount":2,"isInAromaticRing":false,"connectedNodes":[15,16]},{"__type__":"Kekule.Bond","id":"b21","parity":null,"bondType":"covalent","bondOrder":1,"electronCount":2,"isInAromaticRing":false,"connectedNodes":[15,19]},{"__type__":"Kekule.Bond","id":"b22","parity":null,"bondType":"covalent","bondOrder":1,"electronCount":2,"isInAromaticRing":false,"connectedNodes":[15,20]},{"__type__":"Kekule.Bond","id":"b17","parity":null,"bondType":"covalent","bondOrder":1,"electronCount":2,"isInAromaticRing":false,"connectedNodes":[16,21]},{"__type__":"Kekule.Bond","id":"b19","parity":null,"bondType":"covalent","bondOrder":1,"electronCount":2,"isInAromaticRing":false,"connectedNodes":[16,22]},{"__type__":"Kekule.Bond","id":"b24","parity":null,"bondType":"covalent","bondOrder":1,"electronCount":2,"isInAromaticRing":false,"connectedNodes":[19,23]}],"__type__":"Kekule.StructureConnectionTable"},"name":"Untitled Document-1","__type__":"Kekule.Molecule"}
+      </script>
+
+	<script>
+		var composer, viewer, btnGen, btnTerminate;
+		var calculator, timeStart, timeEnd;
+
+		function report(stateText) {
+			document.getElementById('state').innerHTML = stateText;
+		}
+
+		function getCurrMol() {
+			//return composer.getChemSpace().getChildAt(0);
+			return Kekule.ChemStructureUtils.getTotalStructFragment(composer
+					.getChemObj());
+		}
+
+		function calcStart() {
+			btnGen.setEnabled(false);
+			btnTerminate.setEnabled(true);
+			timeStart = Date.now();
+		}
+		function calcEnd() {
+			btnGen.setEnabled(true);
+			btnTerminate.setEnabled(false);
+			timeEnd = Date.now();
+		}
+
+		function generate3D() {
+			var mol = getCurrMol();
+			report('Calculating...');
+			calcStart();
+			calculator = Kekule.Calculator.generate3D(mol, {
+				'forceField' : ''
+			}, function(generatedMol) {
+				calcEnd();
+				var elapse = (timeEnd - timeStart) / 1000;
+				viewer.setChemObj(generatedMol);
+				report('Calculation done in ' + elapse + ' sec');
+			}, function(err) {
+				if (err) {
+					calcEnd();
+					report(err.getMessage ? err.getMessage() : err);
+					Kekule.error(err);
+				}
+			});
+		}
+		function terminate() {
+			report('Terminated by user');
+			calcEnd();
+			if (calculator) {
+				calculator.halt();
+			}
+		}
+
+		function init() {
+			viewer = Kekule.Widget.getWidgetById('chemViewer');
+			composer = Kekule.Widget.getWidgetById('composer');
+			var toolButtons = composer.getCommonToolButtons()
+					|| composer.getDefaultCommonToolBarButtons();
+			toolButtons.push({
+				'id' : 'btnGen',
+				'text' : 'Generate 3D',
+				'hint' : 'Generate 3D structure',
+				'showText' : true,
+				'showGlyph' : false,
+				'cssText' : 'width:auto',
+				'#execute' : generate3D
+			});
+			toolButtons.push({
+				'id' : 'btnTerminate',
+				'text' : 'Terminate',
+				'hint' : 'Terminate calculation',
+				'showText' : true,
+				'showGlyph' : false,
+				'cssText' : 'width:auto',
+				'#execute' : terminate
+			});
+			composer.setCommonToolButtons(toolButtons);
+			btnGen = Kekule.Widget.getWidgetById('btnGen');
+			btnTerminate = Kekule.Widget.getWidgetById('btnTerminate');
+			btnTerminate.setEnabled(false);
+		}
+
+		Kekule.X.domReady(init);
+	</script>
+</body>
+</html>
